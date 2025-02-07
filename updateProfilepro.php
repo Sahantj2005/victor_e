@@ -1,6 +1,6 @@
 <?php
 
-require "sequrity.php"; // Ensure Security class exists and handles sanitization properly
+require "sequrity.php"; 
 
 abstract class Variable
 {
@@ -35,9 +35,32 @@ class Main extends Variable
           $value = filter_input($type, $variable_name, FILTER_UNSAFE_RAW);
           return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
      }
-
+     public function validateDate($date) {
+          $format = 'Y-m-d';
+          $d = DateTime::createFromFormat($format, $date);
+          // The date is valid if $d is a valid DateTime object and the formatted output matches the input date
+          return $d && $d->format($format) === $date;
+      }
+      
+      public function validateMobile($mobile) {
+          // Allow optional leading '+' followed by 10 to 15 digits
+          return preg_match('/^\+?[0-9]{10,15}$/', $mobile);
+      }
+      
      public function main()
      {
+          if (!empty($this->birthday)) {
+               if (!$this->validateDate($this->birthday)) {
+                   return "Invalid date format. Please use YYYY-MM-DD.";
+               }
+           }
+           
+           if (!empty($this->mobile)) {
+               if (!$this->validateMobile($this->mobile)) {
+                   return "Invalid mobile number. Please enter a valid number with 10 to 15 digits.";
+               }
+           }
+           
           $userdata = [
                'email'     => $this->email,
                'fname'     => $this->fname,
@@ -54,12 +77,11 @@ class Main extends Variable
           $result = $checker->validate($userdata);
 
           if ($result === true) {
-               // Continue with further processing if inputs are valid
                $sql = new sql;
                $usql = $sql->sql($userdata);
                return $usql;
           } else {
-               // Return error message if validation fails
+
                return $result;
           }
      }
