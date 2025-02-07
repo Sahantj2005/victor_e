@@ -98,10 +98,10 @@ class sql
 
                                              $insertQuery = "INSERT INTO `address` (`line_1`, `line_2`, `city_city_id`, `distric_distric_id`) VALUES (?, ?, ?, ?);";
                                              $params = [$address1, $address2, $city, $district];
-                                             $types = "ssii"; 
+                                             $types = "ssii";
                                              $result = Database::IUD($insertQuery, $params, $types);
                                              if ($result) {
-                                                  $address_id = Database::$connection->insert_id; 
+                                                  $address_id = Database::$connection->insert_id;
                                                   if ($address_id) {
                                                        $this->mainuserin($userdata, $address_id);
                                                   } else {
@@ -122,32 +122,37 @@ class sql
                                    $x = $u->fetch_assoc();
                                    $adressid = $x["adress_id"];
                                    $dc = Database::Search("SELECT * FROM `city_has_distric` WHERE `city_city_id`='" . $userdata["city"] . "' ");
-                                   $dcdata = $dc->fetch_assoc();
-                                   if ($dcdata["distric_distric_id"] == $userdata["district"]) {
-                                        $dcc = Database::Search("SELECT * FROM `city_has_distric` WHERE `city_city_id`='" . $userdata["city"] . "'");
-                                        $dccc = $dcc->fetch_assoc();
-                                        if ($dccc["distric_distric_id"] == $userdata["district"]) {
-                                             $adressid = $x["adress_id"];
-                                             $address1 = $userdata["address1"];
-                                             $address2 = $userdata["address2"];
-                                             $city = $userdata["city"];
-                                             $district = $userdata["district"];
-                                             Database::IUD("UPDATE `address` SET `line_1` = '".$address1."', `line_2` = '".$address2."', `city_city_id` = '".$city."', `distric_distric_id` = '".$district."' 
-                                             WHERE (`address_id` = '" . $adressid . "');");
-                                             $lastInsertIdQuery = 0;
-                                           return  $this->mainuserin($userdata, $lastInsertIdQuery);
+                                   $cdnum = $dc->num_rows;
+                                   if ($cdnum == 1) {
+                                        $dcdata = $dc->fetch_assoc();
+                                        if ($dcdata["distric_distric_id"] == $userdata["district"]) {
+                                             $dcc = Database::Search("SELECT * FROM `city_has_distric` WHERE `city_city_id`='" . $userdata["city"] . "'");
+                                             $dccc = $dcc->fetch_assoc();
+                                             if ($dccc["distric_distric_id"] == $userdata["district"]) {
+                                                  $adressid = $x["adress_id"];
+                                                  $address1 = $userdata["address1"];
+                                                  $address2 = $userdata["address2"];
+                                                  $city = $userdata["city"];
+                                                  $district = $userdata["district"];
+                                                  Database::IUD("UPDATE `address` SET `line_1` = '" . $address1 . "', `line_2` = '" . $address2 . "', `city_city_id` = '" . $city . "', `distric_distric_id` = '" . $district . "' 
+                                                  WHERE (`address_id` = '" . $adressid . "');");
+                                                  $lastInsertIdQuery = 0;
+                                                  return  $this->mainuserin($userdata, $lastInsertIdQuery);
+                                             } else {
+                                                  return "district and city not match.";
+                                             }
                                         } else {
                                              return "district and city not match.";
                                         }
-                                   }else{
-                                        return "district and city not match.";
+                                   } else {
+                                        return "pleace select distric and city";
                                    }
                               }
                          }
                     }
                } else {
                     $lastInsertIdQuery = 0;
-                   return $this->mainuserin($userdata, $lastInsertIdQuery);
+                    return $this->mainuserin($userdata, $lastInsertIdQuery);
                }
           }
      }

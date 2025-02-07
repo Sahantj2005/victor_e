@@ -171,14 +171,14 @@ function updatepro() {
     var birthday = document.getElementById("birthday").value;
     var district = document.getElementById("district").value;
     var city = document.getElementById("city").value;
-    var address1 = document.getElementById("address-line-1").value; // Fixed typo
-    var address2 = document.getElementById("address-line-2").value; // Fixed typo
+    var address1 = document.getElementById("address-line-1").value; 
+    var address2 = document.getElementById("address-line-2").value; 
     var email = document.getElementById("email").value;
 
 
     var form = new FormData();
 
-    // Append form data
+   
     form.append("firstname", firstname);
     form.append("lastname", lastname);
     form.append("mobile", mobile);
@@ -189,22 +189,14 @@ function updatepro() {
     form.append("address2", address2);
     form.append("email", email);
 
-    // Create a new XMLHttpRequest
     var req = new XMLHttpRequest();
-
     req.open("POST", "updateProfilepro.php", true);
-
-    // Define the callback function for the request
     req.onreadystatechange = function () {
         if (req.readyState === 4 && req.status === 200) {
             alert(req.responseText);
-            alert("Profile updated successfully!");
         } else if (req.readyState === 4) {
-            // Handle errors
             alert("An error occurred. Please try again.");
         }
     };
-
-    // Send the request with the form data
     req.send(form);
 }
