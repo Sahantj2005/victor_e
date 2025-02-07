@@ -312,8 +312,7 @@ if (isset($_SESSION["user_vec"])) {
         <!-- main js -->
         <script src="assets/js/main.js"></script>
         <script src="sahan.js"></script>
-
-
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </body>
 <?php
 } else {
