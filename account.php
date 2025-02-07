@@ -185,55 +185,108 @@ if (isset($_SESSION["user_vec"])) {
                                     <label for="birthday" class="text-neutral-900 text-lg mb-8 fw-medium">Birthday <span class="text-danger">*</span></label>
                                     <input type="date" class="common-input" id="birthday" value="<?php echo $user_data["bod"]; ?>">
                                 </div>
+                                <?php
+                                if (empty($user_data["adress_id"])) {
+                                ?>
+                                    <div class="col-12 col-lg-6 mb-24">
+                                        <label for="district" class="text-neutral-900 text-lg mb-8 fw-medium">District <span class="text-danger">*</span></label>
+                                        <select id="district" class="common-input">
+                                            <option value="" selected disabled>Select District</option>
+                                            <?php
+                                            $dis = Database::Search("SELECT * FROM `distric` ");
+                                            $dis_num  = $dis->num_rows;
+                                            for ($i = 0; $i < $dis_num; $i++) {
+                                                $dis_data = $dis->fetch_assoc();
+                                            ?>
+                                                <option value="<?php echo $dis_data["distric_id"] ?>"><?php echo $dis_data["name"] ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-lg-6 mb-24">
+                                        <label for="city" class="text-neutral-900 text-lg mb-8 fw-medium">City <span class="text-danger">*</span></label>
+                                        <select id="city" class="common-input">
+                                            <option value="" selected disabled>Select city</option>
+                                            <?php
+                                            $dis = Database::Search("SELECT * FROM `city` ");
+                                            $dis_num  = $dis->num_rows;
+                                            for ($i = 0; $i < $dis_num; $i++) {
+                                                $dis_data = $dis->fetch_assoc();
+                                            ?>
+                                                <option value="<?php echo $dis_data["city_id"] ?>"><?php echo $dis_data["name"] ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                <?php
+                                } else {
+                                    $m = Database::Search("SELECT * FROM `address` WHERE `address_id` ='" . $user_data["adress_id"] . "' ");
+                                    $mm = $m->fetch_assoc();
+                                    $dis = Database::Search("SELECT * FROM `distric` WHERE `distric_id`='" . $mm["distric_distric_id"] . "' ");
+                                    $distric = $dis->fetch_assoc();
+                                ?>
+                                    <div class="col-12 col-lg-6 mb-24">
+                                        <label for="district" class="text-neutral-900 text-lg mb-8 fw-medium">District <span class="text-danger">*</span></label>
+                                        <select id="district" class="common-input">
+                                            <option value="<?php echo $distric["distric_id"] ?>" selected><?php echo $distric["name"] ?></option>
+                                            <?php
+                                            $dis = Database::Search("SELECT * FROM `distric` ");
+                                            $dis_num  = $dis->num_rows;
+                                            for ($i = 0; $i < $dis_num; $i++) {
+                                                $dis_data = $dis->fetch_assoc();
+                                            ?>
+                                                <option value="<?php echo $dis_data["distric_id"] ?>"><?php echo $dis_data["name"] ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <?php
+                                     $mn = Database::Search("SELECT * FROM `address` WHERE `address_id` ='" . $user_data["adress_id"] . "' ");
+                                     $mmn = $mn->fetch_assoc();
+                                     $city = Database::Search("SELECT * FROM `city` WHERE `city_id`='" . $mmn["city_city_id"] . "' ");
+                                     $city_a = $city->fetch_assoc();
+                                      ?>
+                                    <div class="col-12 col-lg-6 mb-24">
+                                        <label for="city" class="text-neutral-900 text-lg mb-8 fw-medium">City <span class="text-danger">*</span></label>
+                                        <select id="city" class="common-input">
+                                            <option value="<?php echo $city_a["city_id"]  ?>" selected ><?php echo $city_a["name"]  ?></option>
+                                            <?php
+                                            $dis = Database::Search("SELECT * FROM `city` ");
+                                            $dis_num  = $dis->num_rows;
+                                            for ($i = 0; $i < $dis_num; $i++) {
+                                                $dis_data = $dis->fetch_assoc();
+                                            ?>
+                                                <option value="<?php echo $dis_data["city_id"] ?>"><?php echo $dis_data["name"] ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                <?php
+                                }
+                                ?>
+                                <?php
 
-                                <div class="col-12 col-lg-6 mb-24">
-                                    <label for="district" class="text-neutral-900 text-lg mb-8 fw-medium">District <span class="text-danger">*</span></label>
-                                    <select id="district" class="common-input">
-                                        <option value="" selected disabled>Select District</option>
-                                        <?php
-                                        $dis = Database::Search("SELECT * FROM `distric` ");
-                                        $dis_num  = $dis->num_rows;
-                                        for ($i = 0; $i < $dis_num; $i++) {
-                                            $dis_data = $dis->fetch_assoc();
-                                        ?>
-                                            <option value="<?php echo $dis_data["distric_id"] ?>"><?php echo $dis_data["name"] ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
+                                ?>
 
-                                <div class="col-12 col-lg-6 mb-24">
-                                    <label for="city" class="text-neutral-900 text-lg mb-8 fw-medium">City <span class="text-danger">*</span></label>
-                                    <select id="city" class="common-input">
-                                        <option value="" selected disabled>Select city</option>
-                                        <?php
-                                        $dis = Database::Search("SELECT * FROM `city` ");
-                                        $dis_num  = $dis->num_rows;
-                                        for ($i = 0; $i < $dis_num; $i++) {
-                                            $dis_data = $dis->fetch_assoc();
-                                        ?>
-                                            <option value="<?php echo $dis_data["city_id"] ?>"><?php echo $dis_data["name"] ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
                                 <?php
                                 $x = Database::Search("SELECT * FROM `address` WHERE `address_id`='" . $user_data["adress_id"] . "' ");
                                 $xd = $x->fetch_assoc();
                                 $xnum = $x->num_rows;
                                 if ($xnum == 0) {
                                 ?>
-                                <div class="col-12 col-lg-6 mb-24">
-                                    <label for="address-line-1" class="text-neutral-900 text-lg mb-8 fw-medium">Address Line 1 <span class="text-danger">*</span></label>
-                                    <input type="text" class="common-input" id="address-line-1" placeholder="Enter Address Line 1" >
-                                </div>
+                                    <div class="col-12 col-lg-6 mb-24">
+                                        <label for="address-line-1" class="text-neutral-900 text-lg mb-8 fw-medium">Address Line 1 <span class="text-danger">*</span></label>
+                                        <input type="text" class="common-input" id="address-line-1" placeholder="Enter Address Line 1">
+                                    </div>
 
-                                <div class="col-12 col-lg-6 mb-24">
-                                    <label for="address-line-2" class="text-neutral-900 text-lg mb-8 fw-medium">Address Line 2</label>
-                                    <input type="text" class="common-input" id="address-line-2" placeholder="Enter Address Line 2 (Optional)">
-                                </div>
+                                    <div class="col-12 col-lg-6 mb-24">
+                                        <label for="address-line-2" class="text-neutral-900 text-lg mb-8 fw-medium">Address Line 2</label>
+                                        <input type="text" class="common-input" id="address-line-2" placeholder="Enter Address Line 2 (Optional)">
+                                    </div>
                                 <?php
                                 } else {
                                 ?>

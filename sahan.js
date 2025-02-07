@@ -198,7 +198,7 @@ function updatepro() {
                 Swal.fire({
                     title: 'profile update successfully',
                     text: responseText,
-                    icon: 'success', // You can use 'success', 'error', 'warning', 'info', 'question'
+                    icon: 'success', 
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#3085d6', 
                     background: '#f9f9f9', 
@@ -208,7 +208,7 @@ function updatepro() {
                 Swal.fire({
                     title: 'Alert',
                     text: responseText,
-                    icon: 'info', // You can use 'success', 'error', 'warning', 'info', 'question'
+                    icon: 'info', 
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#3085d6', 
                     background: '#f9f9f9', 
@@ -219,7 +219,7 @@ function updatepro() {
             Swal.fire({
                 title: 'Alert',
                 text: "An error occurred. Please try again.",
-                icon: 'error', // You can use 'success', 'error', 'warning', 'info', 'question'
+                icon: 'error', 
                 confirmButtonText: 'OK',
                 confirmButtonColor: '#3085d6', 
                 background: '#f9f9f9', 
