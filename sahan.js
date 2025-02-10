@@ -229,3 +229,73 @@ function updatepro() {
     };
     req.send(form);
 }
+function plusprice(qty, id) {
+    var form = new FormData();
+    form.append("id", id);
+    form.append("qty", qty+1);
+
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function() {
+        if (req.readyState === 4) {
+            if (req.status === 200) {
+                Swal.fire({
+                    title: 'quantity updated',
+                    text: req.responseText,
+                    icon: 'success', 
+                    showConfirmButton: true,
+                    confirmButtonColor: '#3085d6',
+                    background: '#fefefe',
+                    color: '#333',
+                    timer: 3000,
+                    timerProgressBar: true,
+                });
+                location.reload();
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to update quantity. Please try again.',
+                    icon: 'error',
+                    confirmButtonColor: '#d33',
+                });
+            }
+        }
+    };
+
+    req.open("POST", "qtychange.php", true);
+    req.send(form);
+}
+function minprice(qty, id) {
+    var form = new FormData();
+    form.append("id", id);
+    form.append("qty", qty-1);
+
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function() {
+        if (req.readyState === 4) {
+            if (req.status === 200) {
+                Swal.fire({
+                    title: 'quantity updated',
+                    text: req.responseText,
+                    icon: 'success', 
+                    showConfirmButton: true,
+                    confirmButtonColor: '#3085d6',
+                    background: '#fefefe',
+                    color: '#333',
+                    timer: 3000,
+                    timerProgressBar: true,
+                });
+                location.reload();
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to update quantity. Please try again.',
+                    icon: 'error',
+                    confirmButtonColor: '#d33',
+                });
+            }
+        }
+    };
+
+    req.open("POST", "qtychange.php", true);
+    req.send(form);
+}
