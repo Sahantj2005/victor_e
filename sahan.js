@@ -79,7 +79,7 @@ function updatePassword() {
     const data = new FormData();
     data.append('verificationCode', verificationCode);
     data.append('newPassword', newPassword);
-    data.append("email",email);
+    data.append("email", email);
 
     // Create and send AJAX request
     const req = new XMLHttpRequest();
@@ -108,7 +108,7 @@ function updatePassword() {
     req.send(data);
 }
 function Register() {
-    
+
     const mobile = document.getElementById("mobile").value.trim();
     const email = document.getElementById("emailTwo").value.trim();
     const password = document.getElementById("enter-password").value.trim();
@@ -149,7 +149,7 @@ function Register() {
     form.append("password", password);
 
     var req = new XMLHttpRequest();
-    req.onreadystatechange = function() {
+    req.onreadystatechange = function () {
         // Ensure the request is complete and check the status
         if (req.readyState === 4) {
             if (req.status === 200) {
@@ -171,14 +171,14 @@ function updatepro() {
     var birthday = document.getElementById("birthday").value;
     var district = document.getElementById("district").value;
     var city = document.getElementById("city").value;
-    var address1 = document.getElementById("address-line-1").value; 
-    var address2 = document.getElementById("address-line-2").value; 
+    var address1 = document.getElementById("address-line-1").value;
+    var address2 = document.getElementById("address-line-2").value;
     var email = document.getElementById("email").value;
 
 
     var form = new FormData();
 
-   
+
     form.append("firstname", firstname);
     form.append("lastname", lastname);
     form.append("mobile", mobile);
@@ -194,36 +194,36 @@ function updatepro() {
     req.onreadystatechange = function () {
         if (req.readyState === 4 && req.status === 200) {
             const responseText = req.responseText;
-            if(responseText == "profile update"){
+            if (responseText == "profile update") {
                 Swal.fire({
                     title: 'profile update successfully',
                     text: responseText,
-                    icon: 'success', 
+                    icon: 'success',
                     confirmButtonText: 'OK',
-                    confirmButtonColor: '#3085d6', 
-                    background: '#f9f9f9', 
-                    color: '#333', 
+                    confirmButtonColor: '#3085d6',
+                    background: '#f9f9f9',
+                    color: '#333',
                 });
-            }else{
+            } else {
                 Swal.fire({
                     title: 'Alert',
                     text: responseText,
-                    icon: 'info', 
+                    icon: 'info',
                     confirmButtonText: 'OK',
-                    confirmButtonColor: '#3085d6', 
-                    background: '#f9f9f9', 
-                    color: '#333', 
+                    confirmButtonColor: '#3085d6',
+                    background: '#f9f9f9',
+                    color: '#333',
                 });
             }
         } else if (req.readyState === 4) {
             Swal.fire({
                 title: 'Alert',
                 text: "An error occurred. Please try again.",
-                icon: 'error', 
+                icon: 'error',
                 confirmButtonText: 'OK',
-                confirmButtonColor: '#3085d6', 
-                background: '#f9f9f9', 
-                color: '#333', 
+                confirmButtonColor: '#3085d6',
+                background: '#f9f9f9',
+                color: '#333',
             });
         }
     };
@@ -232,16 +232,16 @@ function updatepro() {
 function plusprice(qty, id) {
     var form = new FormData();
     form.append("id", id);
-    form.append("qty", qty+1);
+    form.append("qty", qty + 1);
 
     var req = new XMLHttpRequest();
-    req.onreadystatechange = function() {
+    req.onreadystatechange = function () {
         if (req.readyState === 4) {
             if (req.status === 200) {
                 Swal.fire({
                     title: 'quantity updated',
                     text: req.responseText,
-                    icon: 'success', 
+                    icon: 'success',
                     showConfirmButton: true,
                     confirmButtonColor: '#3085d6',
                     background: '#fefefe',
@@ -267,16 +267,16 @@ function plusprice(qty, id) {
 function minprice(qty, id) {
     var form = new FormData();
     form.append("id", id);
-    form.append("qty", qty-1);
+    form.append("qty", qty - 1);
 
     var req = new XMLHttpRequest();
-    req.onreadystatechange = function() {
+    req.onreadystatechange = function () {
         if (req.readyState === 4) {
             if (req.status === 200) {
                 Swal.fire({
                     title: 'quantity updated',
                     text: req.responseText,
-                    icon: 'success', 
+                    icon: 'success',
                     showConfirmButton: true,
                     confirmButtonColor: '#3085d6',
                     background: '#fefefe',
@@ -299,3 +299,54 @@ function minprice(qty, id) {
     req.open("POST", "qtychange.php", true);
     req.send(form);
 }
+function adtocart(sprice, discountPercentage, batchId) {
+
+    let discountedPrice = sprice - (sprice * (discountPercentage / 100));
+    var req = new XMLHttpRequest();
+    var form = new FormData();
+    form.append("batch_id", batchId);
+    form.append("price", sprice);
+    form.append("discount", discountPercentage);
+    form.append("final_price", discountedPrice);
+    form.append("quantity", 1);
+
+    req.open("POST", "adddispcart.php", true);
+    req.onreadystatechange = function () {
+        if (req.readyState === 4 && req.status === 200) {
+            responseText = req.responseText;
+            if(responseText == "cart is update"){
+                Swal.fire({
+                    title: "Hey...",
+                    text: "Item added to cart successfully!",
+                    icon: "success",
+                    showConfirmButton: true,
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "OK",
+                    showClass: {
+                        popup: "animate__animated animate__fadeInDown" 
+                    },
+                    hideClass: {
+                        popup: "animate__animated animate__fadeOutUp" 
+                    }
+                });
+            }else{
+                Swal.fire({
+                    title: "Notification",
+                    text: responseText,
+                    icon: "info",
+                    showConfirmButton: true,
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "OK",
+                    showClass: {
+                        popup: "animate__animated animate__fadeInDown" 
+                    },
+                    hideClass: {
+                        popup: "animate__animated animate__fadeOutUp" 
+                    }
+                });
+            }
+        }
+    };
+    req.send(form);
+}
+

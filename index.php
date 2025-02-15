@@ -292,6 +292,7 @@ include_once "connection.php";
                                         <div class="product-card__price my-20">
                                             <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?php echo $bad["selling_price"]; ?></span>
                                             <?php
+                                            $batch_id = $dpro_data["batch_id"];
                                             $sprice = $bad["selling_price"];
                                             $discountpercentage = $dpro_data["discount_pre"];
                                             $nowprice = $sprice - ($sprice * $discountpercentage / 100);
@@ -299,7 +300,7 @@ include_once "connection.php";
                                             <span class="text-heading text-md fw-semibold ">Rs <?php echo $nowprice; ?> <span class="text-gray-500 fw-normal">/Qty<?php echo $dpro_data["qty"] ?>Available for Discount</span> </span>
                                         </div>
 
-                                        <a href="cart.php" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
+                                        <a onclick="adtocart(<?= $sprice ?>, <?= $discountpercentage ?>, <?= $batch_id ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
                                             Add To Cart <i class="ph ph-shopping-cart"></i>
                                         </a>
                                     </div>
@@ -467,8 +468,12 @@ include_once "connection.php";
                                                             <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?php echo $bach_d["selling_price"] + 20 ?></span>
                                                             <span class="text-heading text-md fw-semibold ">Rs <?php echo $bach_d["selling_price"] ?><span class="text-gray-500 fw-normal">/Qty</span><?php echo $bach_d["batch_qty"] ?></span>
                                                         </div>
-
-                                                        <a href="cart.php" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
+                                                        <?php
+                                                        $sprice = $bach_d["selling_price"];
+                                                        $discountpercentage = 0;
+                                                        $batch_id = $bach_d["id"];
+                                                        ?>
+                                                        <a onclick="adtocart(<?= $sprice ?>, <?= $discountpercentage ?>, <?= $batch_id ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
                                                             Add To Cart <i class="ph ph-shopping-cart"></i>
                                                         </a>
                                                     </div>
@@ -538,49 +543,49 @@ include_once "connection.php";
                 </div>
 
                 <div class="row gy-4">
-    <?php
-    $category = Database::Search("SELECT * FROM `category`");
-    $category_num = $category->num_rows;
-
-    for ($i = 0; $i < $category_num; $i++) {
-        $category_data = $category->fetch_assoc();
-    ?>
-        <div class="col-xxl-3 col-xl-4 col-sm-6 col-xs-6 wow bounceIn">
-            <div class="product-card h-100 d-flex gap-16 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                <a href="product-details.php" class="product-card__thumb flex-center h-unset rounded-8 bg-gray-50 position-relative w-unset flex-shrink-0 p-24" tabindex="0">
-                    <img src="assets/images/thumbs/popular-img1.png" alt="" class="w-auto max-w-unset">
-                </a>
-                <div class="product-card__content flex-grow-1">
-                    <h6 class="title text-lg fw-semibold mb-12">
-                        <a href="product-details.php" class="link text-line-2" tabindex="0"><?php echo $category_data["name"]; ?></a>
-                    </h6>
-                    
                     <?php
-                    // Fetch subcategories for the current category
-                    $subcategory = Database::Search("SELECT * FROM `sub_category` WHERE `category_id` = '" . $category_data["id"] . "'");
-                    $subcategory_num = $subcategory->num_rows;
-                    
-                    for ($j = 0; $j < $subcategory_num; $j++) {
-                        $sub_data = $subcategory->fetch_assoc();
-                        ?>
-                        <span class="text-gray-600 text-sm mb-4"><?php echo $sub_data["name"]; ?></span><br>
-                        <?php
+                    $category = Database::Search("SELECT * FROM `category`");
+                    $category_num = $category->num_rows;
+
+                    for ($i = 0; $i < $category_num; $i++) {
+                        $category_data = $category->fetch_assoc();
+                    ?>
+                        <div class="col-xxl-3 col-xl-4 col-sm-6 col-xs-6 wow bounceIn">
+                            <div class="product-card h-100 d-flex gap-16 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
+                                <a href="product-details.php" class="product-card__thumb flex-center h-unset rounded-8 bg-gray-50 position-relative w-unset flex-shrink-0 p-24" tabindex="0">
+                                    <img src="assets/images/thumbs/popular-img1.png" alt="" class="w-auto max-w-unset">
+                                </a>
+                                <div class="product-card__content flex-grow-1">
+                                    <h6 class="title text-lg fw-semibold mb-12">
+                                        <a href="product-details.php" class="link text-line-2" tabindex="0"><?php echo $category_data["name"]; ?></a>
+                                    </h6>
+
+                                    <?php
+                                    // Fetch subcategories for the current category
+                                    $subcategory = Database::Search("SELECT * FROM `sub_category` WHERE `category_id` = '" . $category_data["id"] . "'");
+                                    $subcategory_num = $subcategory->num_rows;
+
+                                    for ($j = 0; $j < $subcategory_num; $j++) {
+                                        $sub_data = $subcategory->fetch_assoc();
+                                    ?>
+                                        <span class="text-gray-600 text-sm mb-4"><?php echo $sub_data["name"]; ?></span><br>
+                                    <?php
+                                    }
+                                    ?>
+
+                                    <a href="shop.php" class="text-tertiary-600 flex-align gap-8 mt-24">
+                                        All Categories
+                                        <i class="ph ph-arrow-right d-flex"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php
                     }
                     ?>
-
-                    <a href="shop.php" class="text-tertiary-600 flex-align gap-8 mt-24">
-                        All Categories
-                        <i class="ph ph-arrow-right d-flex"></i>
-                    </a>
                 </div>
-            </div>
-        </div>
-    <?php
-    }
-    ?>
-</div>
 
-                
+
             </div>
         </div>
     </section>
@@ -752,7 +757,7 @@ include_once "connection.php";
     <?php require_once "footer.php"; ?>
 
 
-
+    <script src="sahan.js"></script>
     <!-- Jquery js -->
     <script src="assets/js/jquery-3.7.1.min.js"></script>
     <!-- Bootstrap Bundle Js -->
@@ -779,7 +784,7 @@ include_once "connection.php";
     <script src="assets/js/counter.min.js"></script>
     <!-- main js -->
     <script src="assets/js/main.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 </body>
