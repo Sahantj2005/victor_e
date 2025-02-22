@@ -238,18 +238,34 @@ function plusprice(qty, id) {
     req.onreadystatechange = function () {
         if (req.readyState === 4) {
             if (req.status === 200) {
-                Swal.fire({
-                    title: 'quantity updated',
-                    text: req.responseText,
-                    icon: 'success',
-                    showConfirmButton: true,
-                    confirmButtonColor: '#3085d6',
-                    background: '#fefefe',
-                    color: '#333',
-                    timer: 3000,
-                    timerProgressBar: true,
-                });
-                location.reload();
+                if (req.responseText == 0) {
+                    Swal.fire({
+                        title: 'Quantity NOT Updated',
+                        text: 'Discounts are available for limited quantities only. Do not increase quantities beyond this.',
+                        icon: 'success',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        background: '#fefefe',
+                        color: '#333',
+                        timer: 10000,
+                        timerProgressBar: true
+                    }).then(() => {
+                        location.reload(); 
+                    });  
+                } else {
+                    Swal.fire({
+                        title: 'quantity updated',
+                        text: req.responseText,
+                        icon: 'success',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        background: '#fefefe',
+                        color: '#333',
+                        timer: 3000,
+                        timerProgressBar: true,
+                    });
+                    location.reload();
+                }
             } else {
                 Swal.fire({
                     title: 'Error!',
@@ -273,18 +289,34 @@ function minprice(qty, id) {
     req.onreadystatechange = function () {
         if (req.readyState === 4) {
             if (req.status === 200) {
-                Swal.fire({
-                    title: 'quantity updated',
-                    text: req.responseText,
-                    icon: 'success',
-                    showConfirmButton: true,
-                    confirmButtonColor: '#3085d6',
-                    background: '#fefefe',
-                    color: '#333',
-                    timer: 3000,
-                    timerProgressBar: true,
-                });
-                location.reload();
+                if (req.responseText == 0) {
+                    Swal.fire({
+                        title: 'Quantity NOT Updated',
+                        text: 'Discounts are available for limited quantities only. Do not increase quantities beyond this.',
+                        icon: 'success',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        background: '#fefefe',
+                        color: '#333',
+                        timer: 10000,
+                        timerProgressBar: true
+                    }).then(() => {
+                        location.reload(); 
+                    });                    
+                } else {
+                    Swal.fire({
+                        title: 'quantity updated',
+                        text: req.responseText,
+                        icon: 'success',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        background: '#fefefe',
+                        color: '#333',
+                        timer: 3000,
+                        timerProgressBar: true,
+                    });
+                    location.reload();
+                }
             } else {
                 Swal.fire({
                     title: 'Error!',
@@ -314,7 +346,7 @@ function adtocart(sprice, discountPercentage, batchId) {
     req.onreadystatechange = function () {
         if (req.readyState === 4 && req.status === 200) {
             responseText = req.responseText;
-            if(responseText == "cart is update"){
+            if (responseText == "cart is update") {
                 Swal.fire({
                     title: "Hey...",
                     text: "Item added to cart successfully!",
@@ -323,13 +355,13 @@ function adtocart(sprice, discountPercentage, batchId) {
                     confirmButtonColor: "#3085d6",
                     confirmButtonText: "OK",
                     showClass: {
-                        popup: "animate__animated animate__fadeInDown" 
+                        popup: "animate__animated animate__fadeInDown"
                     },
                     hideClass: {
-                        popup: "animate__animated animate__fadeOutUp" 
+                        popup: "animate__animated animate__fadeOutUp"
                     }
                 });
-            }else{
+            } else {
                 Swal.fire({
                     title: "Notification",
                     text: responseText,
@@ -338,10 +370,10 @@ function adtocart(sprice, discountPercentage, batchId) {
                     confirmButtonColor: "#3085d6",
                     confirmButtonText: "OK",
                     showClass: {
-                        popup: "animate__animated animate__fadeInDown" 
+                        popup: "animate__animated animate__fadeInDown"
                     },
                     hideClass: {
-                        popup: "animate__animated animate__fadeOutUp" 
+                        popup: "animate__animated animate__fadeOutUp"
                     }
                 });
             }

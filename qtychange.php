@@ -11,22 +11,40 @@ if (isset($_POST["id"]) && isset($_POST["qty"])) {
         exit();
     }
 
-    
+
     $cart = Database::Search("SELECT * FROM `cart` WHERE `id` = '" . $id . "'");
     $cartnum = $cart->num_rows;
 
     if ($cartnum > 0) {
         $cartdata = $cart->fetch_assoc();
-
-        $batch = Database::Search("SELECT * FROM `batch` WHERE `batch_code` = '" . $cartdata["batch_batch_code"] . "'");
-        $batch_data = $batch->fetch_assoc();
-        if ($qty > $batch_data["batch_qty"]) {
-            echo "Error: Not enough stock available. Maximum available: " . $batch_data["batch_qty"];
-        } elseif ($qty == 0) {
-            echo "Error: Quantity cannot be zero.";
+        if ($cartdata["discount"] == 0) {
+            $batch = Database::Search("SELECT * FROM `batch` WHERE `id` = '" . $cartdata["batch_id"] . "'");
+            $batch_data = $batch->fetch_assoc();
+            if ($qty > $batch_data["batch_qty"]) {
+                echo "Error: Not enough stock available. Maximum available: " . $batch_data["batch_qty"];
+            } elseif ($qty == 0) {
+                echo "Error: Quantity cannot be zero.";
+            } else {
+                Database::IUD("UPDATE `cart` SET `qty` = '" . $qty . "' WHERE `id` = '" . $id . "'");
+                echo "UPDATED";
+            }
         } else {
-            Database::IUD("UPDATE `cart` SET `qty` = '" . $qty . "' WHERE `id` = '" . $id . "'");
-            echo "UPDATED";
+            $dis = Database::Search("SELECT * FROM `discount_date_range_has_product` WHERE `batch_id`='" . $cartdata["batch_id"] . "' ");
+            $disdata = $dis->fetch_assoc();
+            if ($disdata["qty"] >= $qty) {
+                $batch = Database::Search("SELECT * FROM `batch` WHERE `id` = '" . $cartdata["batch_id"] . "'");
+                $batch_data = $batch->fetch_assoc();
+                if ($qty > $batch_data["batch_qty"]) {
+                    echo "Error: Not enough stock available. Maximum available: " . $batch_data["batch_qty"];
+                } elseif ($qty == 0) {
+                    echo "Error: Quantity cannot be zero.";
+                } else {
+                    Database::IUD("UPDATE `cart` SET `qty` = '" . $qty . "' WHERE `id` = '" . $id . "'");
+                    echo "UPDATED";
+                }
+            } else {
+                echo 0;
+            }
         }
     } else {
         echo "Error: Cart item not found.";
@@ -34,4 +52,3 @@ if (isset($_POST["id"]) && isset($_POST["qty"])) {
 } else {
     echo "Error: Missing required parameters.";
 }
-?>
